@@ -1,4 +1,7 @@
 import { io } from "socket.io-client";
 
-// One shared socket for the whole app; connects lazily to the backend origin.
-export const socket = io("/", { autoConnect: true, path: "/socket.io" });
+const socketUrl = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "")
+  : "/";
+
+export const socket = io(socketUrl, { autoConnect: true, path: "/socket.io" });
