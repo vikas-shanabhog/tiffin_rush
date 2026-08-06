@@ -29,7 +29,6 @@ registerSocketHandlers(io);
 
 app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
 
-// Stripe webhook needs the raw body, so it's registered before express.json()
 app.post("/api/payments/webhook", express.raw({ type: "application/json" }), (req, res, next) => {
   req.io = io;
   stripeWebhook(req, res, next);
@@ -40,9 +39,6 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-
-// Uploaded restaurant/menu images are served from here, e.g. /uploads/169...-photo.jpg
-app.use("/uploads", express.static(path.resolve("uploads")));
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/auth", authRoutes);
